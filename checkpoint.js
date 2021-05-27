@@ -3,7 +3,7 @@
 // IMPORTANTE!: Para este checkpoint se les brindarán las implementaciones ya realizadas en las
 // homeworks de Queue, LinkedLis y BinarySearchTree. Sobre dicha implementación van a tener que agregar nuevos
 // métodos o construir determinadas funciones explicados más abajo. Pero todos los métodos ya implementados
-// en las homeowrks no es necesario que los vuelvan a definir.
+// en las homeworks no es necesario que los vuelvan a definir.
 
 const {
   Queue,
