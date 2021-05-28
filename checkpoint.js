@@ -250,7 +250,27 @@ var generateBST = function (array) {
 //    [Donde 2 sería el número sobre el cuál queremos saber su posición en el array]
 
 var binarySearch = function (array, target) {
-  // Tu código aca:
+  //elegimos como indice la mitad del array
+  let play = Math.ceil(array.length / 2);
+  //si el indice es el numero buscado lo devolvemos
+  if (array[play] === target) return play;
+  //final de la recursion, el array tiene un unico valor
+  if (array.length === 1) {
+    if (array[0] === target) return 0;
+    else return -1;
+  }
+  //añadimos lostIndice para no perder el indice en la recusion
+  let lostIndice = 0;
+  //dividimos el array
+  if (array[play] < target) {
+    array = array.slice(play + 1, array.length);
+    lostIndice = play + 1;
+  } else array = array.slice(0, play);
+  // realizamos la recursion
+  let result = binarySearch(array, target);
+  // si el resultado es -1 retornar -1 sino retornar la suma de los indices
+  if (result === -1) return -1;
+  else return result + lostIndice;
 };
 
 // EJERCICIO 9
@@ -292,6 +312,19 @@ var binarySearch = function (array, target) {
 
 var specialSort = function (array, firstOrd, secondOrd) {
   // Tu código aca:
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 1; j < array.length - i; j++) {
+      if (array[j - 1][firstOrd] > array[j][firstOrd]) {
+        [array[j - 1], array[j]] = [array[j], array[j - 1]];
+      }
+      if (array[j - 1][firstOrd] === array[j][firstOrd]) {
+        if (array[j - 1][secondOrd] > array[j][secondOrd]) {
+          [array[j - 1], array[j]] = [array[j], array[j - 1]];
+        }
+      }
+    }
+  }
+  return array;
 };
 
 // ----- Closures -----
@@ -311,10 +344,14 @@ var specialSort = function (array, firstOrd, secondOrd) {
 // debe coincidir en todos sus caracteres para que el test pase correctamente
 
 function closureGreeting(prefix) {
-  // Tu código aca:
+  let num = 0;
+  return function (name){
+    num++;
+    return `${prefix} ${name}, you are number ${num}`;
+  }
 }
 
-// -------------------
+// ------------------
 
 // ----- EXTRA CREDIT -----
 
