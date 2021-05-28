@@ -364,8 +364,41 @@ function closureGreeting(prefix) {
 //    const anagrams = allAnagrams('abc');
 //    console.log(anagrams); // [ 'abc', 'acb', 'bac', 'bca', 'cab', 'cba' ]
 
-var allAnagrams = function (string, array, index) {};
-
+var allAnagrams = function (string, array = [], index = []) {
+  // generamos una variable donde cortaremos la string y la haremos array
+  let arrayAux = [];
+  // loop para la recursion
+  for(let i = 0; i < string.length ; i++){
+    // pusheamos el indice actual
+    index.push(string[i]);
+    //condicion de stop, cuando tenemos todos los indices posibles y solo queda una letra.
+    if (string.length === 1) {
+      //pusheamos al array general
+      array.push(index.join(""));
+      //limpiamos el indice
+      index.pop();
+      //retornamos
+      return "Pushed";
+    }
+    // cortamos el string y lo guardamos (de no ser posible ya hubo return arriba)
+    arrayAux = string.split("");
+    arrayAux.splice(i,1);
+    // recursion para seguir acumulando indices hasta ya no ser posible y pushear el anagrama
+    allAnagrams(arrayAux.join(""),array,index);
+    // limpiamos el ultimo indice, vuelve el for y volvemos a generar una nueva combinacion
+    index.pop();
+  }
+  // sacamos las palabras duplicadas
+  for(let i = 0;i<array.length;i++){
+    for(let j = 0;j<array.length;j++){
+      if(array[i] === array[j] && i != j){
+        array.splice(j,1);
+      }
+    }
+  }
+  // retornamos :)
+  return array;
+};
 module.exports = {
   countArray,
   secuenciaHenry,
