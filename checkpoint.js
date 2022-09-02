@@ -22,12 +22,16 @@ const { Queue, Node, LinkedList, BinarySearchTree } = require("./DS.js");
 // [Para más información del método: https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/isArray]
 
 var countArray = function (array) {
-  let forReturn = 0;
-  for (i of array) {
-    if (Array.isArray(i)) forReturn += countArray(i);
-    else forReturn += i;
+  let count = 0;
+  if(Array.isArray(array)){
+    for(let value of array){
+      count += countArray(value);
+    }
+  }else{
+    return array
   }
-  return forReturn;
+  if (!Array.isArray(array))return 0
+  return count;
 };
 
 // EJERCICIO 2
@@ -48,19 +52,8 @@ var countArray = function (array) {
 // secuenciaHenry(6) // 524 ya que el elemento de la posición 6 es 524
 // Para números negativos de n debe devolver false
 function secuenciaHenry(array, n) {
-  //limpiamos el array
-  for (let i = 0; i < array.length; i++) {
-    if (typeof array[i] === "string") array[i] = array[i].length;
-  }
-  // devolvemos el n si pertenece al array, y filtramos los negativos [condiciones stop]
-  if (n < 0) return false;
-  if (n < array.length - 1) return array[n];
-  //incrementamos el largo del array en 1 utilizando la funcion dada
-  let aL = array.length;
-  let resu = (array[aL - 3] + array[aL - 2] + array[aL - 1]) * 2;
-  array.push(resu);
-  //aplicamos recursion hasta que lleguemos a generar el n pedido y lo devolvemos
-  return secuenciaHenry(array, n);
+  
+ 
 }
 
 // ---------------------
@@ -81,14 +74,7 @@ function secuenciaHenry(array, n) {
 
 LinkedList.prototype.size = function () {
   // Tu código aca:
-  if (!this.head) return 0;
-  let node = this.head;
-  let forReturn = 1;
-  while (node.next) {
-    node = node.next;
-    forReturn++;
-  }
-  return forReturn;
+ 
 };
 
 // EJERCICIO 4
@@ -106,29 +92,7 @@ LinkedList.prototype.size = function () {
 //    Suponiendo que se pide una posición inválida: removeFromPos(8) --> false
 
 LinkedList.prototype.removeFromPos = function (pos) {
-  // si pos es invalida devolvemos false
-  let size = this.size();
-  if (pos > size || pos < 0) return false;
-  // si tanto size como pos son 0 devolvemos null
-  if (size === 0 && pos === 0) return null;
-  //generamos la variable donde devolveremos el valor del nodo elminado
-  let forReturn;
-  let node = this.head;
-  let act = 0;
-  //nos movemos hasta el nodo anterior al que debe ser removido
-  while (act < pos - 1) {
-    node = node.next;
-    act++;
-  }
-  // si pos es 0 la condicion es especial por lo tanto lo resolvemos en esta linea
-  if (pos === 0) {
-    forReturn = node.value;
-    this.head = this.head.next;
-  } else {
-    forReturn = node.next.value;
-    node.next = node.next.next;
-  }
-  return forReturn;
+  
 };
 
 // EJERCICIO 5
@@ -141,20 +105,8 @@ LinkedList.prototype.removeFromPos = function (pos) {
 // partir de él construir la nueva lista ordenada
 
 var orderLinkedList = function (linkedList) {
-  //convertimos la lista a array
-  let array = [];
-  node = linkedList.head;
-  while (node) {
-    array.push(node.value);
-    node = node.next;
-  }
-  // la ordenamos usando el metodo sort
-  array = array.sort((a, b) => a - b);
-  //creamos la nueva lista
-  forReturn = new LinkedList();
-  while (array.length > 0) forReturn.add(array.shift());
-  //retornamos
-  return forReturn;
+  
+
 };
 
 // ----------------------
@@ -182,33 +134,7 @@ var orderLinkedList = function (linkedList) {
 
 var controlAcces = function (queue, event) {
   // Tu código aca:
-  // creamos las variables que almacenan tickets y personas admitidas
-  let admitted = [];
-  let tickets = [];
-  //vaciamos la queue
-  while (queue.size() != 0) {
-    let person = queue.dequeue();
-    // revisamos si es mayor de edad y si esta en el evento correspondiente
-    if (person["age"] >= 18 && person["ticket"]["event"] === event) {
-      let ok = true;
-      //revisamos que el n de ticket no se haya usado antes
-      for (ticket of tickets) {
-        if (person["ticket"]["number"] === ticket) ok = false;
-      }
-      //si pasa las condiciones anteriores lo admitimos sumandolo a las listas
-      if (ok) {
-        admitted.push(person);
-        tickets.push(person["ticket"]["number"]);
-      }
-    }
-  }
-  //volvemos a llenar la queue con los asistentes y armamos el array de nombres para retornar
-  let forReturn = [];
-  for (person of admitted) {
-    forReturn.push(person["fullname"]);
-    queue.enqueue(person);
-  }
-  return forReturn;
+ 
 };
 
 // ---------------
@@ -230,9 +156,7 @@ var controlAcces = function (queue, event) {
 //       5
 
 var generateBST = function (array) {
-  forReturn = new BinarySearchTree(array.shift());
-  for (i of array) forReturn.insert(i);
-  return forReturn;
+  
 };
 
 // ---------------
@@ -250,27 +174,7 @@ var generateBST = function (array) {
 //    [Donde 2 sería el número sobre el cuál queremos saber su posición en el array]
 
 var binarySearch = function (array, target) {
-  //elegimos como indice la mitad del array
-  let play = Math.ceil(array.length / 2);
-  //si el indice es el numero buscado lo devolvemos
-  if (array[play] === target) return play;
-  //final de la recursion, el array tiene un unico valor
-  if (array.length === 1) {
-    if (array[0] === target) return 0;
-    else return -1;
-  }
-  //añadimos lostIndice para no perder el indice en la recusion
-  let lostIndice = 0;
-  //dividimos el array
-  if (array[play] < target) {
-    array = array.slice(play + 1, array.length);
-    lostIndice = play + 1;
-  } else array = array.slice(0, play);
-  // realizamos la recursion
-  let result = binarySearch(array, target);
-  // si el resultado es -1 retornar -1 sino retornar la suma de los indices
-  if (result === -1) return -1;
-  else return result + lostIndice;
+ 
 };
 
 // EJERCICIO 9
@@ -311,20 +215,7 @@ var binarySearch = function (array, target) {
 // (Siempre el ordenamiento es de menor a mayor sea cual fuera la propiedad indicada para el orden)
 
 var specialSort = function (array, firstOrd, secondOrd) {
-  // Tu código aca:
-  for (let i = 0; i < array.length; i++) {
-    for (let j = 1; j < array.length - i; j++) {
-      if (array[j - 1][firstOrd] > array[j][firstOrd]) {
-        [array[j - 1], array[j]] = [array[j], array[j - 1]];
-      }
-      if (array[j - 1][firstOrd] === array[j][firstOrd]) {
-        if (array[j - 1][secondOrd] > array[j][secondOrd]) {
-          [array[j - 1], array[j]] = [array[j], array[j - 1]];
-        }
-      }
-    }
-  }
-  return array;
+ 
 };
 
 // ----- Closures -----
@@ -344,11 +235,7 @@ var specialSort = function (array, firstOrd, secondOrd) {
 // debe coincidir en todos sus caracteres para que el test pase correctamente
 
 function closureGreeting(prefix) {
-  let num = 0;
-  return function (name){
-    num++;
-    return `${prefix} ${name}, you are number ${num}`;
-  }
+ 
 }
 
 // ------------------
@@ -365,39 +252,7 @@ function closureGreeting(prefix) {
 //    console.log(anagrams); // [ 'abc', 'acb', 'bac', 'bca', 'cab', 'cba' ]
 
 var allAnagrams = function (string, array = [], index = []) {
-  // generamos una variable donde cortaremos la string y la haremos array
-  let arrayAux = [];
-  // loop para la recursion
-  for(let i = 0; i < string.length ; i++){
-    // pusheamos el indice actual
-    index.push(string[i]);
-    //condicion de stop, cuando tenemos todos los indices posibles y solo queda una letra.
-    if (string.length === 1) {
-      //pusheamos al array general
-      array.push(index.join(""));
-      //limpiamos el indice
-      index.pop();
-      //retornamos
-      return "Pushed";
-    }
-    // cortamos el string y lo guardamos (de no ser posible ya hubo return arriba)
-    arrayAux = string.split("");
-    arrayAux.splice(i,1);
-    // recursion para seguir acumulando indices hasta ya no ser posible y pushear el anagrama
-    allAnagrams(arrayAux.join(""),array,index);
-    // limpiamos el ultimo indice, vuelve el for y volvemos a generar una nueva combinacion
-    index.pop();
-  }
-  // sacamos las palabras duplicadas
-  for(let i = 0;i<array.length;i++){
-    for(let j = 0;j<array.length;j++){
-      if(array[i] === array[j] && i != j){
-        array.splice(j,1);
-      }
-    }
-  }
-  // retornamos :)
-  return array;
+ 
 };
 module.exports = {
   countArray,
